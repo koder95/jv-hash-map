@@ -63,6 +63,8 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
         return newNodes;
     }
     
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final double LOAD_FACTOR = 0.75;
     private int size = 0;
 
     @Override
