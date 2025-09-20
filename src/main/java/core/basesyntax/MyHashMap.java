@@ -3,6 +3,7 @@ package core.basesyntax;
 import java.util.Objects;
 
 public class MyHashMap<K, V> implements MyMap<K, V> {
+    private int size = 0;
 
     @Override
     public void put(K key, V value) {
@@ -16,7 +17,7 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
 
     @Override
     public int getSize() {
-        return 0;
+        return size;
     }
 
     private static class Node<K, V> {
