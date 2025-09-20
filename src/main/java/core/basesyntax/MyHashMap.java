@@ -65,16 +65,23 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
     
     private static final int DEFAULT_CAPACITY = 16;
     private static final double LOAD_FACTOR = 0.75;
+    private Node<K, V>[] nodes = new Node[DEFAULT_CAPACITY];
     private int size = 0;
 
     @Override
     public void put(K key, V value) {
 
+    private Node<K, V> getNode(K key) {
+        return getNode(nodes, key);
     }
 
     @Override
     public V getValue(K key) {
-        return null;
+        try {
+            return getNode(key).value;
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     @Override
