@@ -68,8 +68,18 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
     private Node<K, V>[] nodes = new Node[DEFAULT_CAPACITY];
     private int size = 0;
 
+    private int resizeAndPutInto(K key, V value, int size) {
+        int threshold = (int) (nodes.length * LOAD_FACTOR);
+        if (size > threshold) {
+            nodes = growUp(nodes, size, nodes.length * 2);
+        }
+        return putInto(nodes, key, value, size);
+    }
+
     @Override
     public void put(K key, V value) {
+        size = resizeAndPutInto(key, value, size);
+    }
 
     private Node<K, V> getNode(K key) {
         return getNode(nodes, key);
