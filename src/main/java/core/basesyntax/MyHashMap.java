@@ -3,6 +3,30 @@ package core.basesyntax;
 import java.util.Objects;
 
 public class MyHashMap<K, V> implements MyMap<K, V> {
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final double LOAD_FACTOR = 0.75;
+    private Node<K, V>[] nodes = new Node[DEFAULT_CAPACITY];
+    private int size = 0;
+
+    @Override
+    public void put(K key, V value) {
+        size = resizeAndPutInto(key, value, size);
+    }
+
+    @Override
+    public V getValue(K key) {
+        try {
+            return getNode(key).value;
+        } catch (NullPointerException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public int getSize() {
+        return size;
+    }
+
     private static <K, V> Node<K, V> getNode(Node<K, V>[] array, K key) {
         Node<K, V> node = array[Math.abs(Objects.hashCode(key)) % array.length];
         while (node != null) {
@@ -62,11 +86,6 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
         }
         return newNodes;
     }
-    
-    private static final int DEFAULT_CAPACITY = 16;
-    private static final double LOAD_FACTOR = 0.75;
-    private Node<K, V>[] nodes = new Node[DEFAULT_CAPACITY];
-    private int size = 0;
 
     private int resizeAndPutInto(K key, V value, int size) {
         int threshold = (int) (nodes.length * LOAD_FACTOR);
@@ -76,27 +95,8 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
         return putInto(nodes, key, value, size);
     }
 
-    @Override
-    public void put(K key, V value) {
-        size = resizeAndPutInto(key, value, size);
-    }
-
     private Node<K, V> getNode(K key) {
         return getNode(nodes, key);
-    }
-
-    @Override
-    public V getValue(K key) {
-        try {
-            return getNode(key).value;
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public int getSize() {
-        return size;
     }
 
     private static class Node<K, V> {
