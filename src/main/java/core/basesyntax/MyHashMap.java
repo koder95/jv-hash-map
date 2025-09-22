@@ -30,7 +30,7 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
 
     private int resizeAndPutInto(K key, V value, int size) {
         int threshold = (int) (nodes.length * LOAD_FACTOR);
-        if (size > threshold) {
+        if (size >= threshold) {
             nodes = growUp(nodes, size, nodes.length * 2);
         }
         return putInto(nodes, key, value, size);
