@@ -27,6 +27,18 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
         return size;
     }
 
+    private int resizeAndPutInto(K key, V value, int size) {
+        int threshold = (int) (nodes.length * LOAD_FACTOR);
+        if (size > threshold) {
+            nodes = growUp(nodes, size, nodes.length * 2);
+        }
+        return putInto(nodes, key, value, size);
+    }
+
+    private Node<K, V> getNode(K key) {
+        return getNode(nodes, key);
+    }
+
     private static <K, V> Node<K, V> getNode(Node<K, V>[] array, K key) {
         Node<K, V> node = array[Math.abs(Objects.hashCode(key)) % array.length];
         while (node != null) {
@@ -85,18 +97,6 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
             }
         }
         return newNodes;
-    }
-
-    private int resizeAndPutInto(K key, V value, int size) {
-        int threshold = (int) (nodes.length * LOAD_FACTOR);
-        if (size > threshold) {
-            nodes = growUp(nodes, size, nodes.length * 2);
-        }
-        return putInto(nodes, key, value, size);
-    }
-
-    private Node<K, V> getNode(K key) {
-        return getNode(nodes, key);
     }
 
     private static class Node<K, V> {
