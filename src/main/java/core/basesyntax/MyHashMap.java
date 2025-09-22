@@ -5,6 +5,7 @@ import java.util.Objects;
 public class MyHashMap<K, V> implements MyMap<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double LOAD_FACTOR = 0.75;
+    private static final int NEG_HASH_MASK = 0x7fffffff;
     private Node<K, V>[] nodes = new Node[DEFAULT_CAPACITY];
     private int size = 0;
 
@@ -40,7 +41,7 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
     }
 
     private static <K, V> Node<K, V> getNode(Node<K, V>[] array, K key) {
-        Node<K, V> node = array[Math.abs(Objects.hashCode(key)) % array.length];
+        Node<K, V> node = array[(Objects.hashCode(key) & NEG_HASH_MASK) % array.length];
         while (node != null) {
             if (Objects.equals(node.key, key)) {
                 return node;
@@ -66,7 +67,7 @@ public class MyHashMap<K, V> implements MyMap<K, V> {
     private static <K, V> int putInto(Node<K, V>[] array, K key, V value, int size) {
         Node<K, V> node = getNode(array, key);
         if (node == null) {
-            int bucket = Math.abs(Objects.hashCode(key)) % array.length;
+            int bucket = (Objects.hashCode(key) & NEG_HASH_MASK) % array.length;
             node = new Node<>(key);
             node.value = value;
             Node<K, V> first = array[bucket];
